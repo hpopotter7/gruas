@@ -1,0 +1,121 @@
+table:hover{
+  cursor: pointer;
+}
+tr td{
+   font-size: 14px;
+}
+.user-row {
+    margin-bottom: 14px;
+}
+
+.user-row:last-child {
+    margin-bottom: 0;
+}
+
+.dropdown-user {
+    margin: 13px 0;
+    padding: 5px;
+    height: 100%;
+}
+
+.dropdown-user:hover {
+    cursor: pointer;
+}
+
+.table-user-information > tbody > tr {
+    border-top: 1px solid rgb(221, 221, 221);
+}
+
+.table-user-information > tbody > tr:first-child {
+    border-top: 0;
+}
+
+.panel-body{
+  padding: .1em;
+    border: 1px solid rgba(114, 114, 117, 0.74);
+    border-radius: .5em;
+}
+
+.table-user-information > tbody > tr > td {
+    border-top: 0;
+}
+.toppad
+{margin-top:20px;
+}
+
+fieldset {
+  border: 4px double #7d7a7a;
+  padding: 20px;
+}
+
+fieldset legend {
+  border: none;
+  width: auto;
+  color: #242121;
+  font-size: 19px;
+  padding: 0 19px;
+  margin: 0 auto;
+}
+
+#sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+  #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+  #sortable li span { position: absolute; margin-left: -1.3em; }
+  .tabs {
+max-width: 640px;
+margin: 0 auto;
+padding: 0 20px;
+}
+#tab-button {
+display: table;
+table-layout: fixed;
+width: 100%;
+margin: 0;
+padding: 0;
+list-style: none;
+}
+#tab-button li {
+display: table-cell;
+width: 20%;
+}
+#tab-button li a {
+display: block;
+padding: .5em;
+background: #eee;
+border: 1px solid #ddd;
+text-align: center;
+color: #000;
+text-decoration: none;
+}
+#tab-button li:not(:first-child) a {
+border-left: none;
+}
+#tab-button li a:hover,
+#tab-button .is-active a {
+border-bottom-color: transparent;
+background: #fff;
+}
+.tab-contents {
+padding: .5em 2em 1em;
+border: 1px solid #ddd;
+}
+.tab-button-outer {
+display: none;
+}
+.tab-contents {
+margin-top: 20px;
+}
+@media screen and (min-width: 768px) {
+.tab-button-outer {
+  position: relative;
+  z-index: 2;
+  display: block;
+}
+.tab-select-outer {
+  display: none;
+}
+.tab-contents {
+  position: relative;
+  top: -1px;
+  margin-top: 0;
+}
+}

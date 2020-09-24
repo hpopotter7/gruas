@@ -1,6 +1,6 @@
 // Call the dataTables jQuery plugin
 $(document).ready(function() {
-
+/*
   var espaniol={
     "sProcessing":     "Procesando...",
     "sLengthMenu":     "Mostrar _MENU_ registros",
@@ -25,6 +25,7 @@ $(document).ready(function() {
         "sSortDescending": ": Activar para ordenar la columna de manera descendente"
     }
 }
+*/
 /*
   $('.sortable').sortable({
     disabled: true
@@ -46,24 +47,27 @@ $(document).ready(function() {
 */
 
   //$('#dataTable').DataTable();
+  /*
   var oTables=$('#dataTable').DataTable( {
   "searching": false,
   "ordering": true,
   "info":     true,
   "paging":   false,
   //"pageLength": 10,
-  "language" : espaniol
-} );
-$('#dataTable tbody').on( 'click', 'tr', function () {
-    //oTables.rows().eq(0).each( function ( index ) {
-      var row = oTables.row( oTables.row( this ).index() );
-      var data = row.data();
-      $('#txt_chofer_llegada').val(data[2]);
-      $('#txt_tipo_grua_llegada').val(data[1]);
+  "language" : espaniol,
+  "columnDefs": [
+     { "width": "15px" },
+     null,
+     null,
+     null,
+     null,
+     null,  
+],
 
-    //} );
 } );
+*/
 
+/*
 $('#dataTable_length').hide();
 
 var oTable=$('#example2').DataTable( {
@@ -85,21 +89,7 @@ $('#example2 tbody').on( 'click', 'tr', function () {
     } );
 } );
 
-$('#btn_candado').click(function(){
-  var valor=$(this).html();
-  if(valor.includes('Editar orden')){
-    $('.sortable').sortable({
-      disabled: true
-    });
-          $(this).html('<i class="fa fa-save" aria-hidden="true"></i> Guardar orden');
-  }
-  else{
-    $('.sortable').sortable({
-      disabled: false
-    });
-    $(this).html('<i class="fa fa-random" aria-hidden="true"></i> Editar orden');
-  }
-});
+*/
 
 
 

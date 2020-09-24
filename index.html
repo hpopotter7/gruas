@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
 
@@ -11,31 +11,43 @@
 
   <title>Gruas Vázquez - Dashboard</title>
 
-  <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-
-  <!-- Page level plugin CSS-->
-  <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
-
-  <!-- Custom styles for this template-->
   <link href="css/sb-admin.css" rel="stylesheet">
+  
   <link href="css/estilos.css" rel="stylesheet">
-  <link href="css/datatables.css" rel="stylesheet"/>
   <link href="css/dataTables.bootstrap.css" rel="stylesheet"/>
-  <link href="css/dataTables.bootstrap4.css" rel="stylesheet"/>
-  <link href="css/jquery.dataTables.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link href="css/sweetalert.css" rel="stylesheet"/>
-  <style>
+  <link href="css/dataTables.bootstrap4.css" rel="stylesheet"/> 
+  <link href="css/slate.css" rel="stylesheet"/>
+  <link href="css/time.css" rel="stylesheet"/>
 
-    </style>
+     
+  <link rel="stylesheet"  href="css/jquery-confirm.css"/>
+  <link rel="stylesheet"  href="css/demo.css">
+  <script>
+    var version = '3.3.4';
+</script>
+<style>
+  /*table thead { display:block; }*/
+  #div_servicio { width: 100%; max-height:300px; overflow: auto;}
+  .checkbox { /* Double-sized Checkboxes */
+  margin-left: 15px;
+  -ms-transform: scale(1.2); /* IE */
+  -moz-transform: scale(1.2); /* FF */
+  -webkit-transform: scale(1.2); /* Safari and Chrome */
+  -o-transform: scale(1.2); /* Opera */
+  padding: 5px;
+  }
+  
+
+
+</style>
 </head>
 
-<body id="page-top" style='background-color: rgba(4, 18, 27, 1);color: white'>
+<body id="page-top">
 
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-    <a class="navbar-brand mr-1" href="index.html">Gruas Vázquez</a>
+    <a class="navbar-brand mr-1" href="index.html"><img src="images/logo.png" alt="" width="100px"></a>
 
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
       <i class="fas fa-bars"></i>
@@ -59,7 +71,7 @@
   </nav>
 
   <div id="wrapper">
-
+    
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
       <li class="nav-item active">
@@ -70,12 +82,23 @@
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-fw fa-list"></i>
-          <span>Catálogos</span>
+          <i class="fas fa-fw fa-truck"></i>
+          <span>Choferes</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="login.html"><i class="fas fa-fw fa-truck"></i> Choferes</a>
-          <a class="dropdown-item" href="login.html"><i class="fas fa-fw fa-user"></i> Usuarios</a>
+          <button id='menu_add_chofer_catalogo' class="dropdown-item" ><i class="fas fa-plus"></i> Agregar</button>
+          <button id='menu_del_chofer_catalogo' class="dropdown-item" ><i class="fas fa-trash"></i> Eliminar</button>
+          <!--<button id='menu_edit_chofer_catalogo' class="dropdown-item" ><i class="fas fa-edit"></i> Modificar</button>-->
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-fw fa-users"></i>
+          <span>Usuarios</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <button id='menu_add_user' class="dropdown-item"><i class="fas fa-plus"></i> Agregar</button>
+          <button id='menu_borrar_user' class="dropdown-item"><i class="fas fa-trash"></i> Eliminar</button>
         </div>
       </li>
       <li class="nav-item">
@@ -87,12 +110,13 @@
 
     <div id="content-wrapper">
 
-      <div class="container-fluid" style='background-color: rgb(4, 19, 32) !important; color: white !important'>
+      <div class="container-fluid">
         <!-- DataTables Example -->
-        <div class="card mb-3" style='background-color: rgb(4, 19, 32) !important;color: white !important'>
+        
+        <div class="card mb-3" >
           <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <div class="table-responsive" id="div_servicio">
+              <table class="table table-bordered table-hover" id="dataTable" cellspacing="0">
                 <thead>
                   <tr>
                     <th># Folio</th>
@@ -103,74 +127,33 @@
                     <th>Duración</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr style='background-color:#50A845'>
-                    <td>1908001</td>
-                    <td>Grande</td>
-                    <td>Pedro</td>
-                    <td>Tokio</td>
-                    <td>10/08/2019 13:35</td>
-                    <td>00:24</td>
-                  </tr>
-                  <tr style='background-color:#F6BC3F'>
-                    <td>1908002</td>
-                    <td>Convencional</td>
-                    <td>Paco</td>
-                    <td>Uruapan</td>
-                    <td>10/08/2019 12:35</td>
-                    <td>02:26</td>
-                  </tr>
-                  <tr style='background-color:#5094ec'>
-                    <td>1908003</td>
-                    <td>Industrial</td>
-                    <td>Luis</td>
-                    <td>Caseta San Angel</td>
-                    <td>10/08/2019 16:35</td>
-                    <td>05:19</td>
-                  </tr>
-                  <tr>
-                    <td>Cedric Kelly</td>
-                    <td>Senior Javascript Developer</td>
-                    <td>Edinburgh</td>
-                    <td>22</td>
-                    <td>11/08/2019 03:35</td>
-                    <td>03:00</td>
-                  </tr>
+                <tbody id='servicios''>
+                  
                 </tbody>
               </table>
             </div>
           </div>
         </div>
+        
         <hr>
         <div id='div_servicios' class="row">
         <div class="col-md-3">
           
-          <select name="" class='form-control' id="c_tipo_grua">
-            <option value="Plataforma">Plataforma</option>
+          <select name="c_tipo_grua" class='form-control' id="c_tipo_grua">
+            <option value="Grande" selected>Grande</option>
             <option value="Industrial">Industrial</option>
-            <option value="Grande">Grande</option>
+            <option value="Plataforma" >Plataforma</option>
+           
           </select>
           <div class="table-responsive">
-            <table class="table table-bordered display " id="example2" width="100%" cellspacing="0">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Nombre</th>
-                </tr>
-              </thead>
+            <table class="table table-bordered" id="example2" width="100%" cellspacing="0">
               <tbody class='sortable'>
-                <tr>
-                  <td>1</td>
-                  <td>Juan Perez</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Alan Sandoval</td>
-                </tr>
+                
               </tbody>
             </table>
-            <button class='btn btn-success'><i class="fas fa-plus"></i> Agregar</button>
-            <button class='btn btn-danger float-right'><i class="fas fa-minus"></i> Eliminar</button>
+            <button id='btn_agregar_chofer' class='btn btn-success'><i class="fas fa-plus"></i> Agregar</button>
+            <!--<button class='btn btn-warning' id='btn_candado' style='margin-left: 35px;'><i class="fa fa-lock"></i></button>-->
+            <button id='btn_del_chofer' class='btn btn-danger float-right'><i class="fas fa-minus"></i> Eliminar</button>
           </div>
         </div>
         <div class="col-md-5">
@@ -188,17 +171,17 @@
               </select>
             </div>
 
-            <div id="tab01" class="tab-contents">
+            <div id="tab01" class="tab-contents" >
               <div class="panel-body">
                 <div class="row">
                   <div class=" col-md-12 col-lg-12 ">
                     <table class="table table-user-information">
                       <tbody>
                         <tr>
-                          <td><h4><span class="badge badge-info">Grua:</span></h4></td>
+                          <td><h4><span class="badge badge-light">Grua:</span></h4></td>
                           <td>
                             <select name="c_tipo_grua_2" id="c_tipo_grua_2" class='form-control'>
-                            <option value="Grande">Grande</option>
+                            <option value="Grande" selected>Grande</option>
                             <option value="Industrial">Industrial</option>
                             <option value="Plataforma">Plataforma</option>
                             </select>
@@ -207,26 +190,25 @@
                         <tr>
                           <td><a href="#" id='btn_lock' class='btn btn-warning'><i class="fas fa-fw fa-lock"></i> Chofer:</a></td>
                           <td>
-                            <select name="c_tipo_grua_2" id="c_tipo_grua_2" class='form-control'>
-                            <option value="Pedro">Pedro</option>
-                            <option value="Paco" disabled>Paco</option>
-                            <option value="Luis" disabled>Luis</option>
-                            <option value="Roberto" disabled>Roberto</option>
-                            </select>
+                            
+                            <input type="text" class="form-control disabled" id='txt_chofer_siguiente' disabled='disabled'>
 
                           </td>
                         </tr>
                         <tr>
-                          <td><h4><span class="badge badge-info">Folio:</span></td>
+                          <td><h4><span class="badge badge-light">Folio:</span></td>
                           <td><input type="text" id='txt_folio' class='form-control'></td>
                         </tr>
                         <tr>
-                          <td><h4><span class="badge badge-info">Destino:</span></h4></span></td>
+                          <td><h4><span class="badge badge-light">Destino:</span></h4></span></td>
                           <td><textarea type="text" class='form-control' id='area_destino' required></textarea></td>
                         </tr>
                       </tbody>
                     </table>
-                    <button type="button" class='btn btn-success float-md-right' name="button">
+                    <button type="button" id='btn_especial' class='btn btn-info float-md-left' name="button">
+                      <i class="fas fa-helicopter" aria-hidden="true"></i> Especial
+                    </button>
+                    <button type="button" id='btn_salida' class='btn btn-success float-md-right' name="button">
                     <i class="fa fa-truck" aria-hidden="true"></i> Dar salida
                   </button>
                   </div>
@@ -249,8 +231,16 @@
                         </tr>
                         <tr>
                           <td><h4><span class="badge badge-info">Llegada:</span></h4></td>
-                          <td><input type="time" id="txt_hora_llegada" name="txt_hora_llegada"
-          min="00:00" max="24:00" class='form-control' required></td>
+                          <td><input type="text" id="txt_hora_llegada" name="txt_hora_llegada" class='form-control time_element' required></td>
+                        </tr>
+                        <tr>
+                          <td><h4><span class="badge badge-info">Tipo de servicio:</span></h4></td>
+                          <td>
+                          <select name="c_tipo_servicio" id="inputc_tipo_servicio" class="form-control">
+                            <option value="Normal">Normal</option>
+                            <option value="Muerto">Muerto</option>
+                          </select>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -262,82 +252,221 @@
               </div>
             </div>
           </div>
-        <!--
-          <div id='div_servicio_salida' class="panel panel-info">
-
-          </div>
-          <div id='div_servicio_llegada' class="panel panel-info">
-
-          </div>
-        -->
-        </div>
-        <div class="col-md-4">
-          <fieldset>
-            <legend>Observaciones</legend>
-          <textarea id='observaciones' class="form-control" name="name" rows="20" cols="10">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae quae nihil nam, itaque aliquid reprehenderit corporis quis, deleniti ad voluptatum qui, vero iusto! Dicta veritatis voluptate alias nemo dolore, vel.</textarea>
-          <div class="clearfix"></div>
-          <button type="button" class='btn btn-primary btn-block' name="button">
-          <i class="fa fa-save" aria-hidden="true"></i> Guardar
-        </button>
-          </fieldset>
-        </div>
+         </div>
+         <div class="col-md-4">
+          <textarea id='observaciones' class="form-control" name="name" rows="25" cols="6" style='font-size: .85em;'></textarea>
+          <button type="button" class='btn btn-info btn-block' name="button" style='font-size: 1.5em;'>
+            <i class="fa fa-save" aria-hidden="true"></i><strong> Guardar</strong></button>
+         </div>
+       
       </div>
       </div>
-
-        <br/><br/>
-
       </section>
       <!-- /.container-fluid -->
     </div>
     <!-- /.content-wrapper -->
+    
+    
   </div>
+  
   <!-- /#wrapper -->
 
   <!-- Scroll to Top Button-->
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
+<!-- 
+<section id='notas' class="col-md-4 cambio">
+  
+  <header><h1>Observaciones</h1></header>
+  <article>
+    <textarea id='observaciones' class="form-control" name="name" rows="30" cols="8" style='font-size: 1.2em;'></textarea>
+    <div class="clearfix"></div>
+    <button type="button" class='btn btn-info btn-block' name="button" style='font-size: 1.5em;'>
+    <i class="fa fa-save" aria-hidden="true"></i><strong> Guardar</strong></button>
+  </article>
+  
+  </section> -->
 
-  <!-- Logout Modal
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal" id='modal_agregar_chofer'>
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
+          <h5 class="modal-title">Agregar chofer disponible</h5>
+          <button type="button" id='btn_cerrar_modal_1' class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-body">
+          <form action="agregar_chofer" method="post">
+            <select name="c_add_chofer" id="c_add_chofer" class='form-control'>
+            </select>
+          </form>
+        </div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
+          <button type="button" id='btn_add_chofer' class="btn btn-success">Agregar</button>
+          
         </div>
       </div>
     </div>
   </div>
--->
+
+  <div class="modal" id='modal_eliminar_chofer'>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Eliminar chofer disponible</h5>
+          <button type="button" id='btn_cerrar_modal_2' class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="agregar_chofer" method="post">
+            <select name="c_del_chofer" id="c_del_chofer" class='form-control'>
+
+            </select>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id='btn_borrar_chofer' class="btn btn-danger">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id='modal_catalogo_add_chofer'>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Catalogo choferes - Agregar</h5>
+          <button type="button" id='btn_cerrar_modal_3' class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="agregar_chofer_catalogo" method="post">
+        <div class="modal-body">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-user"></i></span>
+              </div>
+              <input type="text" class="form-control" id='txt_nombre' name='txt_nombre' required placeholder="Nombre completo">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-phone"></i></span>
+              </div>
+              <input type="text" class="form-control" id='txt_phone' name='txt_phone' required placeholder="Teléfono">
+            </div>
+            <div class="input-group mb-3">              
+              <div class="checkbox">
+                  <input type="checkbox" value="X" id='check_plataforma' name='check_plataforma' class='checkbox'>
+                  <label for='check_plataforma'>Plataforma</label>
+                  <input type="checkbox" value="X" id='check_industrial' name='check_industrial' class='checkbox'>
+                  <label for='check_industrial'>Industrial</label>
+                  <input type="checkbox" value="X" id='check_grande' name='check_grande' class='checkbox'>
+                  <label for='check_grande'>Grande</label>
+              </div>
+              
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" id='btn_add_chofer_catalogo' class="btn btn-success">Agregar</button>
+        </div>
+      </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id='modal_catalogo_del_chofer'>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Catalogo choferes - Eliminar</h5>
+          <button type="button" id='btn_cerrar_modal_4' class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="agregar_chofer" method="post">
+            <select name="c_del_chofer_catalogo" id="c_del_chofer_catalogo" class='form-control'>
+            </select>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id='btn_del_chofer_catalogo' class="btn btn-danger">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id='modal_user_add'>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Catalogo usuarios - Agregar</h5>
+          <button type="button" id='btn_cerrar_modal_5' class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="form_agregar_usuario" method="post">
+        <div class="modal-body">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-user"></i></span>
+              </div>
+              <input type="text" class="form-control" id='txt_nombre' name='txt_nombre' required placeholder="Nombre completo">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-user"></i></span>
+              </div>
+              <input type="text" class="form-control" id='txt_user' name='txt_user' required placeholder="Username">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" id='btn_add_user' class="btn btn-success">Agregar</button>
+        </div>
+      </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id='modal_user_borrar'>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Catalogo usuarios - Eliminar</h5>
+          <button type="button" id='btn_cerrar_modal_6' class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="form_borrar_usuario" method="post">
+            <select name="c_usuarios" id="c_usuarios" class='form-control'>
+            </select>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id='btn_borrar_usuario' class="btn btn-danger">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Bootstrap core JavaScript-->
-  <script src="vendor/jquery/jquery.min.js"></script>
+  <!--<script src="vendor/jquery/jquery.min.js"></script>-->
+  <script src="js/jquery-1.11.2.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Core plugin JavaScript-->
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Page level plugin JavaScript-->
-
-  <script src="vendor/datatables/jquery.dataTables.js"></script>
-  <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
-
-  <!-- Custom scripts for all pages-->
-  <script src="js/sb-admin.js"></script>
-  <script src="js/sweetalert2.min.js"></script>
-
-  <!-- Demo scripts for this page-->
+  <!--<script src="vendor/datatables/jquery.dataTables.js"></script>-->
+  
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="js/demo/datatables-demo.js"></script>
+  <script src="js/jquery-confirm.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+  <script src="js/time.js"></script>
 
+  <script src="js/metodos.js"></script>
 </body>
 
 </html>

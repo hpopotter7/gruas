@@ -32,7 +32,6 @@
       url:   'ver_choferes_disponibles.php',
       type:  'post',
       success:  function (response) {
-        console.log(response);
         $('#example2').html(response);
       }
     });
@@ -74,6 +73,7 @@ $('#div_servicio_llegada').hide();
 
 
   //tecla enter en el textarea de notas
+  /*
   $('#observaciones').keypress(function(ev) {
     var keycode = (ev.keyCode ? ev.keyCode : ev.which);
     console.log(keycode);
@@ -82,6 +82,28 @@ $('#div_servicio_llegada').hide();
         $('#observaciones').val(valor+"\n==========================");
     }
 });
+*/
+$('#btn_guardar_notas').on("click",function(e) {
+  guardar_notas();
+});
+
+function guardar_notas(){
+  var notas=$('#observaciones').val();
+    var datos={"notas":notas}
+    $.ajax({
+      data: datos,
+      url:   'guardar_notas.php',
+      type:  'post',
+      success:  function (response) {
+        if(response.includes("Exito")){
+          alert("Notas guardadas");
+        }
+        else{
+          alert("Error: "+response);
+        }
+      }
+    });
+}
 
 $('#btn_salida').click(function(){
   $('#div_servicio_salida').show();
@@ -90,7 +112,70 @@ $('#btn_salida').click(function(){
 $('#btn_llegada').click(function(){
   $('#div_servicio_salida').hide();
   $('#div_servicio_llegada').show();
+  recibir_servicio();
 });
+
+function recibir_servicio(){
+  var pasa=true;
+  var folio=$('#txt_folio_llegada').val();
+  var tipo=$('#inputc_tipo_servicio').val();
+  var hora_llegada=$('#txt_hora_llegada').val();
+  var fecha_llegada=$('#txt_fecha_llegada').val();
+  if(folio=="" || $('#txt_chofer_llegada').val()=="" || $('#txt_tipo_grua_llegada').val()==""){
+    alert("Debe seleccionar un registro de la tabla servicios");
+    pasa=false;
+  }
+  if(fecha_llegada=="" || fecha_llegada==null){
+    alert("Debe ingresar una fecha de llegada");
+    pasa=false;
+  }
+  if(hora_llegada=="" || hora_llegada==null){
+    alert("Debe ingresar una hora de llegada");
+    pasa=false;
+  }
+  if(pasa){
+    var llegada=fecha_llegada+ " "+hora_llegada;
+    var datos={"folio":folio,"tipo":tipo,"llegada":llegada};
+    $.ajax({
+      url:   'recibir_servicio.php',
+      data: datos,
+      type:  'post',
+      success:  function (response) {
+        if(response.includes("recibido exitoso")){
+          console.log(response);
+          var arr=response.split("#");
+          var chofer=arr[1];
+          var grua=arr[2];
+          var datos2={"chofer":chofer, "grua":grua};
+          $.ajax({
+            url:   'add_chofer_disponible.php',
+            type:  'post',
+            data: datos2,
+            success:  function (response) {
+              alert("Se ha recibido el servicio correctamente");
+              $('#btn_cerrar_modal_1').click();
+              ver_choferes_disponibles();
+              $('#txt_folio_llegada').val('');
+              $('#txt_chofer_llegada').val('');
+              $('#txt_tipo_grua_llegada').val('');
+              $('#txt_fecha_llegada').val('');
+              $('#txt_hora_llegada').val('');
+              $('#txt_hora_llegada').timepicki({reset: true});
+              $('#inputc_tipo_servicio').val('Normal');
+              $('#tab_01').click();
+            }
+          });
+          
+        }
+        else{
+          alert("Error:"+response);
+        }
+      }
+    });
+  }
+  
+}
+
 
 var $tabButtonItem = $('#tab-button li'),
       $tabSelect = $('#tab-select'),
@@ -130,6 +215,12 @@ var $tabButtonItem = $('#tab-button li'),
     $(target).show();
   });
 
+  $('#btn_seleccion_chofer').on('click',function(){
+    var chofer=$('#c_lista_choferes_disponibles').val();
+    $('#txt_chofer_siguiente').val(chofer);
+    $('.btn_modal').click();
+  });
+
 $('#btn_lock').click(function(e){
   e.preventDefault();
   $.confirm({
@@ -154,8 +245,18 @@ $('#btn_lock').click(function(e){
                     });
                     return false;
                 }else{
-                    if(input.val()=="gruas2020"){
-                      alert("Se debe mostrar una lista de todos los choferes disponibles");
+                    if(input.val()=="gruas2021"){
+                      $.ajax({
+                        url:   'choferes_disponibles_lista.php',
+                        type:  'post',
+                        success:  function (response) {
+                           // console.log(response);
+                          $('#c_lista_choferes_disponibles').html(response);
+                          $("#exampleModal_lista").modal({
+                            fadeDuration: 100
+                          });
+                        }
+                      });
                     }
                     else{
                       alert("Contraseña incorrecta");
@@ -233,13 +334,12 @@ ver_servicios();
             $('#tab-select').val('#tab02');
             var id=$(this).attr("id");
             ver_servicios_folio(id);
-            
       
           //} );
       } );
 
       function ver_servicios_folio(folio){
-        
+        $('#txt_folio_llegada').val(folio);
         var datos={
           "folio": folio,
         };
@@ -255,6 +355,7 @@ ver_servicios();
             }else{
              $('#txt_chofer_llegada').val(response.chofer);
              $('#txt_tipo_grua_llegada').val(response.grua);
+             
             }
             
           }
@@ -281,7 +382,7 @@ function inicia_tiempo() {
   console.log(tiempo);
   if (tiempo == 0) {
     ver_servicios();
-    tiempo=10;
+    tiempo=3;
     inicia_tiempo();
   } 
   else {
@@ -387,8 +488,7 @@ $('#btn_add_chofer').click(function(){
 
 $('#btn_borrar_chofer').click(function(){
   var chofer=$('#c_del_chofer').val();
-  var grua=$('#c_tipo_grua').val();
-  var datos={"chofer":chofer, "grua":grua};
+  var datos={"chofer":chofer};
   $.ajax({
     url:   'del_chofer_disponible.php',
     type:  'post',
@@ -457,7 +557,7 @@ $('#btn_salida').click(function(){
           $('#txt_folio').val("");
           $('#txt_chofer_siguiente').val("");
           ver_chofer_siguiente();
-          alert(response);
+          alert("Se ha despachado el servicio "+folio);
           ver_choferes_disponibles();
           tiempo=1;
         }
@@ -558,7 +658,42 @@ $('#btn_borrar_usuario').click(function(e){
       }
     });
 });
+/*
+$('#btn_del_chofer').on('click', function(){
+  alert("response");
+});
+*/
 
+$('#btn_guardar_pass').on('click', function(e){
+  var pass=$('#txt_nuevo_pass').val();
+  if(pass=="" || pass==null){
+    alert("Debes ingresar un valor válido");
+  }
+  else if(pass.length<4){
+    alert("La contraseña debe contener mínimo 5 caracteres");
+  }
+  else if(pass=="gruas2021"){
+    alert("La contraseña no puede ser la misma que la default");
+  }
+  else{
+    var datos={
+      "pass": pass,
+  };
+    $.ajax({
+      url:   'actualizar_pass.php',
+      type:  'post',
+      data: datos,
+      success:  function (response) {
+        alert(response);
+        $('#txt_nuevo_pass').val("");
+        $('#btn_cerrar_modal').click();
+      }
+    });
+  }  
+});
 
+$('#btn_especial').on('click', function(){
+  alert("Mostrar tabla de multiples choferes ");
+});
 
 })(jQuery); // End of use strict

@@ -1,3 +1,24 @@
+<?php
+if(!isset($_COOKIE['user'])) {
+  header('Location:index.php');
+}
+else if(isset($_COOKIE['user']) && ($_COOKIE['user'])=="No existe"){
+  header('Location:index.php');
+}
+else if(isset($_COOKIE['user']) && ($_COOKIE['user'])=="Caducada"){
+  header('Location:index.php');
+}
+else if(isset($_COOKIE['user']) && ($_COOKIE['user'])=="Cambio de pass"){
+  
+}
+else{
+  $secondsInactive = time() - $_COOKIE['start'];
+  
+}
+          
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -37,13 +58,16 @@
   -o-transform: scale(1.2); /* Opera */
   padding: 5px;
   }
-  
-
 
 </style>
 </head>
 
 <body id="page-top">
+<?php
+if(isset($_COOKIE['opcion']) && ($_COOKIE['opcion'])=="primera"){
+    echo "<script>alert('Se recomienda cambiar la contraseña en el icono de usuario');</script>";
+}
+?>
 
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
@@ -58,15 +82,17 @@
        
     </form>
 
-    <!-- Navbar -->
-    <ul class="navbar-nav ml-auto ml-md-0">
-          <li class="nav-item dropdown no-arrow">
-        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <label for="">Alan Sandoval</label>
-          <i class="fas fa-user-circle fa-fw"></i>
-        </a>
-      </li>
-    </ul>
+    <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <i class="fas fa-user-circle fa-fw"></i> <?php echo $_COOKIE['user']?>
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Cambiar contraseña
+</button>
+    <a class="dropdown-item" href="logout.php">Cerrar Sesión</a>
+  </div>
+</div>
 
   </nav>
 
@@ -102,7 +128,7 @@
         </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="reportes.html">
+        <a class="nav-link" href="reportes.php">
           <i class="fas fa-fw fa-table"></i>
           <span>Reportes</span></a>
       </li>
@@ -160,7 +186,7 @@
           <div class="tabs">
             <div class="tab-button-outer">
               <ul id="tab-button">
-                <li><a href="#tab01">Salidas</a></li>
+                <li><a id='tab_01' href="#tab01">Salidas</a></li>
                 <li><a href="#tab02">LLegadas</a></li>
               </ul>
             </div>
@@ -201,7 +227,7 @@
                         </tr>
                         <tr>
                           <td><h4><span class="badge badge-light">Destino:</span></h4></span></td>
-                          <td><textarea type="text" class='form-control' id='area_destino' required></textarea></td>
+                          <td><textarea type="text" class='form-control' id='area_destino'></textarea></td>
                         </tr>
                       </tbody>
                     </table>
@@ -222,6 +248,10 @@
                     <table class="table table-user-information">
                       <tbody>
                         <tr>
+                          <td><h4><span class="badge badge-info">Folio:</span></h4></td>
+                          <td><input type="text" id='txt_folio_llegada' class='form-control disabled' readonly></td>
+                        </tr>
+                        <tr>
                           <td><h4><span class="badge badge-info">Chofer:</span></h4></td>
                           <td><input type="text" id='txt_chofer_llegada' class='form-control disabled' readonly></td>
                         </tr>
@@ -231,7 +261,7 @@
                         </tr>
                         <tr>
                           <td><h4><span class="badge badge-info">Llegada:</span></h4></td>
-                          <td><input type="text" id="txt_hora_llegada" name="txt_hora_llegada" class='form-control time_element' required></td>
+                          <td><input type="date" id='txt_fecha_llegada' class='form-control' ><input type="text" id="txt_hora_llegada" name="txt_hora_llegada" class='form-control time_element' required></td>
                         </tr>
                         <tr>
                           <td><h4><span class="badge badge-info">Tipo de servicio:</span></h4></td>
@@ -244,7 +274,7 @@
                         </tr>
                       </tbody>
                     </table>
-                    <button type="button" class='btn btn-success float-md-right' name="button">
+                    <button type="button" id='btn_llegada' class='btn btn-success float-md-right' name="button">
                     <i class="fa fa-truck fa-flip-horizontal" aria-hidden="true"></i> Recibir
                   </button>
                   </div>
@@ -255,8 +285,9 @@
          </div>
          <div class="col-md-4">
           <textarea id='observaciones' class="form-control" name="name" rows="25" cols="6" style='font-size: .85em;'></textarea>
-          <button type="button" class='btn btn-info btn-block' name="button" style='font-size: 1.5em;'>
+          <button id='btn_guardar_notas' type="button" class='btn btn-info btn-block' name="button" style='font-size: 1.5em;'>
             <i class="fa fa-save" aria-hidden="true"></i><strong> Guardar</strong></button>
+            <span id='resultado_notas'></span>
          </div>
        
       </div>
@@ -452,6 +483,48 @@
       </div>
     </div>
   </div>
+
+  
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ingresa tu nueva contraseña</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="password" name="" id="txt_nuevo_pass" class="form-control" required="required" title="">
+      </div>
+      <div class="modal-footer">
+        <button id='btn_cerrar_modal' type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button id='btn_guardar_pass' type="button" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="exampleModal_lista" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Choferes disponibless</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <select name="c_lista_choferes_disponibles" id="c_lista_choferes_disponibles" class='form-control'></select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn_modal" data-dismiss="modal">Cerrar</button>
+        <button id='btn_seleccion_chofer' type="button" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- Bootstrap core JavaScript-->
   <!--<script src="vendor/jquery/jquery.min.js"></script>-->

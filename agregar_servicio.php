@@ -36,7 +36,7 @@ else{
 }
 
 
-$sql="delete from disponibles where chofer='".$chofer."' and tipo_grua='".$grua."'";
+$sql="delete from disponibles where chofer='".$chofer."'";
 if ($mysqli->query($sql)) {
     $res='Exito';
 }

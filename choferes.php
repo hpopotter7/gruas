@@ -94,7 +94,7 @@ if(isset($_COOKIE['opcion']) && ($_COOKIE['opcion'])=="primera"){
 
   </nav>
 
-  <div id="wrapper">
+    <div id="wrapper">
     
     <!-- Sidebar -->
     <?php
@@ -103,44 +103,31 @@ if(isset($_COOKIE['opcion']) && ($_COOKIE['opcion'])=="primera"){
 
     <div id="content-wrapper">
       <div class="container-fluid">
-        <!-- DataTables Example -->
-        <div class="row">
-        <div class="col-md-2">
-        <div class="form-group">
-            <label for="exampleSelect"><h4>Selecciona un reporte</h4></label>
-            <select class="form-control" id="exampleSelect">
-                <option value=''>Selecciona...</option>
-                <option value='choferes'>Choferes</option>
-                <option value='mensual'>Mensual</option>
-            </select>            
-        </div>
-        </div>        
-        </div>
-        <div class="row" style='background-color:white'>
-          <canvas id="myChart" width="100" height="100"></canvas>
-        </div>
-        <br><p></p>
-        <div class="row">
-          <div class="col-md-1"></div>
-          <div class="col-md-10">
-      <!--       Chart.js Canvas Tag -->
-            <canvas id="barChart"></canvas>
-          </div>
-          <div class="col-md-1"></div>
-        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td scope="row"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td scope="row"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
         </div>        
       </div>
-      <!-- /.container-fluid -->
     </div>
-    <!-- /.content-wrapper -->    
-  </div>
-  
-  <!-- /#wrapper -->
-
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
+    
 
   <!-- Bootstrap core JavaScript-->
   <!--<script src="vendor/jquery/jquery.min.js"></script>-->

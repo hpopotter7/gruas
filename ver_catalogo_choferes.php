@@ -6,11 +6,11 @@ if (mysqli_connect_errno()) {
 }
 
 $result = $mysqli->query("SET NAMES 'utf8'");
-$sql="SELECT nombre_completo from choferes order by nombre_completo asc";
+$sql="SELECT id_choferes, nombre_completo from choferes where estado='A' order by nombre_completo asc";
 if ($result = $mysqli->query($sql)) {
     $res='<option val="vacio">Selecciona...</option>';
     while ($row = $result->fetch_row()) {
-        $res=$res."<option val='".$row[0]."'>".$row[0]."</option>";
+        $res=$res."<option val='".$row[0]."'>".$row[1]."</option>";
     }
     $result->close();
 }

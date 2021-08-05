@@ -72,17 +72,6 @@ $('#div_servicio_llegada').hide();
   });
 
 
-  //tecla enter en el textarea de notas
-  /*
-  $('#observaciones').keypress(function(ev) {
-    var keycode = (ev.keyCode ? ev.keyCode : ev.which);
-    console.log(keycode);
-    if(keycode == 13) {
-      var valor=$('#observaciones').val();
-        $('#observaciones').val(valor+"\n==========================");
-    }
-});
-*/
 $('#btn_guardar_notas').on("click",function(e) {
   guardar_notas();
 });
@@ -96,10 +85,10 @@ function guardar_notas(){
       type:  'post',
       success:  function (response) {
         if(response.includes("Exito")){
-          alert("Notas guardadas");
+          Swal.fire("Éxito","Notas guardadas", "success");
         }
         else{
-          alert("Error: "+response);
+          Swal.fire("Oops",response, "warning");
         }
       }
     });
@@ -122,15 +111,15 @@ function recibir_servicio(){
   var hora_llegada=$('#txt_hora_llegada').val();
   var fecha_llegada=$('#txt_fecha_llegada').val();
   if(folio=="" || $('#txt_chofer_llegada').val()=="" || $('#txt_tipo_grua_llegada').val()==""){
-    alert("Debe seleccionar un registro de la tabla servicios");
+    Swal.fire("Oops","Debe seleccionar un registro de la tabla servicios", "warning");
     pasa=false;
   }
-  if(fecha_llegada=="" || fecha_llegada==null){
-    alert("Debe ingresar una fecha de llegada");
+  else if(fecha_llegada=="" || fecha_llegada==null){
+    Swal.fire("Oops","Debe ingresar una fecha de llegada", "warning");
     pasa=false;
   }
   if(hora_llegada=="" || hora_llegada==null){
-    alert("Debe ingresar una hora de llegada");
+    Swal.fire("Oops","Debe ingresar una hora de llegada", "warning");
     pasa=false;
   }
   if(pasa){
@@ -142,7 +131,7 @@ function recibir_servicio(){
       type:  'post',
       success:  function (response) {
         if(response.includes("recibido exitoso")){
-          console.log(response);
+          
           var arr=response.split("#");
           var chofer=arr[1];
           var grua=arr[2];
@@ -152,7 +141,7 @@ function recibir_servicio(){
             type:  'post',
             data: datos2,
             success:  function (response) {
-              alert("Se ha recibido el servicio correctamente");
+              Swal.fire("Éxito","Se ha recibido el servicio correctamente", "success");
               $('#btn_cerrar_modal_1').click();
               ver_choferes_disponibles();
               $('#txt_folio_llegada').val('');
@@ -168,7 +157,7 @@ function recibir_servicio(){
           
         }
         else{
-          alert("Error:"+response);
+          Swal.fire("Oops","Error: "+response, "warning");
         }
       }
     });
@@ -250,7 +239,7 @@ $('#btn_lock').click(function(e){
                         url:   'choferes_disponibles_lista.php',
                         type:  'post',
                         success:  function (response) {
-                           // console.log(response);
+                           
                           $('#c_lista_choferes_disponibles').html(response);
                           $("#exampleModal_lista").modal({
                             fadeDuration: 100
@@ -319,7 +308,7 @@ ver_servicios();
                 url:   'ver_servicios.php',
                 type:  'post',
                 success:  function (response) {
-                   // console.log(response);
+                   
                   $('#servicios').html(response);
                 }
               });
@@ -333,6 +322,7 @@ ver_servicios();
             $('#tab02').show();
             $('#tab-select').val('#tab02');
             var id=$(this).attr("id");
+            
             ver_servicios_folio(id);
       
           //} );
@@ -369,19 +359,20 @@ ver_servicios();
     $.ajax({
       url:   'ver_observaciones.php',
       type:  'post',
-      
       success:  function (response) {
-         $('#observaciones').html(response);
+         $('#observaciones').html(response.trim());
       }
     });
 }
 
 
 function inicia_tiempo() {
-  //cada 10 segundos se refresca la pantalla de servicios para ver si hay cambios
-  console.log(tiempo);
+  //cada 3 segundos se refresca la pantalla de servicios para ver si hay cambios
+  
   if (tiempo == 0) {
     ver_servicios();
+    ver_choferes_disponibles();
+    ver_observaciones();
     tiempo=3;
     inicia_tiempo();
   } 
@@ -470,14 +461,13 @@ $('#btn_add_chofer').click(function(){
     alert("Debe seleccionar a un chofer de la lista");
   }
   else{
-    alert("se agregará chofer");
     var datos={"chofer":chofer, "grua":grua};
   $.ajax({
     url:   'add_chofer_disponible.php',
     type:  'post',
     data: datos,
-    success:  function (response) {
-      alert(response);
+    success:  function (response) {;
+      Swal.fire("Éxito","El chofer ha sido agregado", "success");
       $('#btn_cerrar_modal_1').click();
       ver_choferes_disponibles();
     }
@@ -486,58 +476,70 @@ $('#btn_add_chofer').click(function(){
   
 });
 
-$('#btn_borrar_chofer').click(function(){
-  var chofer=$('#c_del_chofer').val();
-  var datos={"chofer":chofer};
-  $.ajax({
-    url:   'del_chofer_disponible.php',
-    type:  'post',
-    data: datos,
-    success:  function (response) {
-      alert(response);
-      $('#btn_cerrar_modal_2').click();
-      ver_choferes_disponibles();
-    }
-  });
+$('#btn_borrar_chofer').on('click',function(){
+  var chofer=$('#c_del_chofer').val();  
+    var datos={"chofer":chofer};
+    $.ajax({
+      url:   'del_chofer_disponible.php',
+      type:  'post',
+      data: datos,
+      success:  function (response) {
+        Swal.fire("Éxito","Chofer eliminado", "success");
+        $('#btn_cerrar_modal_2').click();
+        ver_choferes_disponibles();
+      }
+    });  
 });
 
-$('#c_tipo_grua_2').change(function(){
+$('#c_tipo_grua_2').on('change',function(){
   ver_chofer_siguiente();
 });
 
 
 function ver_chofer_siguiente(){
   var grua=$('#c_tipo_grua_2').val();
-  var datos={"grua":grua};
-  $.ajax({
-    url:   'siguiente_chofer.php',
-    type:  'post',
-    data: datos,
-    success:  function (response) {
-      console.log(response);
-      if(response.includes("vacio")){
-        alert("no hay choferes dsiponibles para ese tipo de grua");
-        $('#txt_chofer_siguiente').val("");
+  if(grua!=""){
+    $('#txt_chofer_siguiente').val("");
+    var datos={"grua":grua};
+    $.ajax({
+      url:   'siguiente_chofer.php',
+      type:  'post',
+      data: datos,
+      success:  function (response) {
+        console.log(response);
+        if(response.includes("vacio")){
+          
+          Swal.fire("Oops!","no hay choferes dsiponibles para ese tipo de grua","info");
+          $('#txt_chofer_siguiente').val("");
+          grua=$('#c_tipo_grua_2').val('');
+        }
+        else{
+          $('#txt_chofer_siguiente').val(response);
+        }
       }
-      else{
-        $('#txt_chofer_siguiente').val(response);
-      }
-    }
-  });
+    });
+  }
+  else{
+    $('#txt_chofer_siguiente').val("");
+  }
 }
 $('#btn_salida').click(function(){
   var grua=$('#c_tipo_grua_2').val();
   var chofer=$('#txt_chofer_siguiente').val();
   var destino=$('#area_destino').val();
   var folio=$('#txt_folio').val();
-  if(chofer==""){
-    alert("Debe de seleccionar un chofer");
+  if(grua==""){
+    Swal.fire("Oops!","Debe de seleccionar un tipo de grua", "warning");
+  }
+  else if(chofer==""){
+    Swal.fire("Oops!","El chofer no puede ir vacio", "warning");
   }
   else if(destino==""){
     alert("Debe ingresar un destino");
+    Swal.fire("Oops!","Debe de ingresar un destino", "warning");
   }
   else if(folio==""){
-    alert("Debe de ingresar un folio");
+    Swal.fire("Oops!","Debe de ingresar un folio", "warning");
   }
   else{
     var datos={
@@ -550,19 +552,21 @@ $('#btn_salida').click(function(){
       url:   'agregar_servicio.php',
       type:  'post',
       data: datos,
-      success:  function (response) {
-        console.log(response);
+      success:  function (response) {        
         if(response.includes("xito")){
           $('#area_destino').val("");
           $('#txt_folio').val("");
           $('#txt_chofer_siguiente').val("");
           ver_chofer_siguiente();
-          alert("Se ha despachado el servicio "+folio);
-          ver_choferes_disponibles();
+          Swal.fire("Éxito","Se ha despachado el servicio "+folio, "success");
+          $('#c_tipo_grua_2').val('');
+          $('#txt_chofer_siguiente').val('');
+          $('#area_destino').val('');
+          $('#txt_folio').val('');
           tiempo=1;
         }
         else if(response.includes("duplicado")){
-          alert("El folio ya existe");
+          Swal.fire("Oops","El folio <b>"+folio+"</b> ya existe", "warning");
         }
       }
     });
@@ -574,10 +578,10 @@ $('#btn_salida').click(function(){
 $('#btn_add_chofer_catalogo').click(function(e){
   e.preventDefault();
   if($('#txt_nombre').val()==""){
-    alert("Debe ingresar un nombre");
+    Swal.fire("Oops","Debe ingresar un nombre", "warning");
   }
   else if($('#txt_phone').val()==""){
-    alert("Debe ingresar un teléfono");
+    Swal.fire("Oops","Debe ingresar un teléfono", "warning");
   }
   else{
     $.ajax({
@@ -585,26 +589,52 @@ $('#btn_add_chofer_catalogo').click(function(e){
       type:  'post',
       data: $('#agregar_chofer_catalogo').serialize(),
       success:  function (response) {
-        console.log(response);
-        alert(response);
-        $('#btn_cerrar_modal_3').click();
+        if(response.includes("Exito")){
+          $('#btn_cerrar_modal_3').click();
+          Swal.fire("Éxito","El chofer ha sido agregado", "success");
+        }
+        else{
+          Swal.fire("Oops",response, "warning");
+        }                
       }
     });
   } 
 });
 
 $('#btn_del_chofer_catalogo').click(function(){
-  var chofer=$('#c_del_chofer_catalogo').val();
-  var datos={"chofer":chofer};
+  var chofer=$('#c_del_chofer_catalogo option:selected').text();
+  var id=$('#c_del_chofer_catalogo').val();
+  var lista=$('#example2').html();
+  var servicios=$('#dataTable').html();
+  alert(chofer);
+  alert(servicios);
+  if(chofer=="Selecciona..."){
+    Swal.fire("Oops","Debe seleccionar a un chofer de la lista", "warning");
+  }
+  else if(lista.includes(chofer)){
+      Swal.fire("Oops!","El chofer "+chofer+" esta en la lista de choferes disponibles.\nDebe eliminarlo primero de la lista.","warning");
+  }
+  else if(servicios.includes(chofer)){
+    Swal.fire("Oops!","El chofer "+chofer+" esta servicio.\nDebe recibir el servicio primero y eliminarlo de la lista de disponible.","warning");
+}
+  else{
+  var datos={"id":id};
     $.ajax({
       url:   'borrar_chofer_catalogo.php',
       type:  'post',
       data: datos,
       success:  function (response) {
-        alert(response);
-        $('#btn_cerrar_modal_4').click();
+        if(response.includes("Exito")){
+          $('#btn_cerrar_modal_4').click();
+          Swal.fire("Éxito","El chofer ha sido eliminado", "success");
+        }
+        else{
+          Swal.fire("Oops",response, "warning");
+        }  
+        
       }
-    });
+    } );
+  }
 });
 
 
@@ -622,8 +652,14 @@ $('#btn_add_user').on("click",function(e){
       type:  'post',
       data: $('#form_agregar_usuario').serialize(),
       success:  function (response) {
-        alert(response);
-        $('#btn_cerrar_modal_5').click();
+        if(response.includes("xito")){
+          $('#btn_cerrar_modal_5').click();
+          Swal.fire("Éxito","Usuario creado", "success");
+        }
+        else{
+          Swal.fire("Oppr","Error: "+response, "warning");
+        }
+        
       }
     });
 });
@@ -633,7 +669,6 @@ $('#menu_borrar_user').click(function(){
     url:   'c_usuarios.php',
     type:  'post',
     success:  function (response) {
-      console.log(response);
       $('#c_usuarios').html(response);
     }
   });
@@ -644,36 +679,37 @@ $('#menu_borrar_user').click(function(){
 
 $('#btn_borrar_usuario').click(function(e){
   e.preventDefault();
-  var nombre=$('#c_usuarios').val();
+  var id=$('#c_usuarios').val();
   var datos={
-      "nombre": nombre,
+      "id": id,
   };
     $.ajax({
       url:   'borrar_usuario.php',
       type:  'post',
       data: datos,
       success:  function (response) {
-        alert(response);
-        $('#btn_cerrar_modal_6').click();
+        if(response.includes("xito")){
+          $('#btn_cerrar_modal_6').click();
+          Swal.fire("Éxito","Usuario eliminado", "success");
+        }
+        else{
+          Swal.fire("Oppr","Error: "+response, "warning");
+        }
+        
       }
     });
 });
-/*
-$('#btn_del_chofer').on('click', function(){
-  alert("response");
-});
-*/
 
 $('#btn_guardar_pass').on('click', function(e){
   var pass=$('#txt_nuevo_pass').val();
   if(pass=="" || pass==null){
-    alert("Debes ingresar un valor válido");
+    Swal.fire("Opps","Debes ingresar un valor válido", "warning");
   }
   else if(pass.length<4){
-    alert("La contraseña debe contener mínimo 5 caracteres");
+    Swal.fire("Opps","La contraseña debe contener mínimo 5 caracteres", "warning");
   }
   else if(pass=="gruas2021"){
-    alert("La contraseña no puede ser la misma que la default");
+    
   }
   else{
     var datos={
@@ -684,9 +720,15 @@ $('#btn_guardar_pass').on('click', function(e){
       type:  'post',
       data: datos,
       success:  function (response) {
-        alert(response);
-        $('#txt_nuevo_pass').val("");
-        $('#btn_cerrar_modal').click();
+        if(response.includes("Error")){
+          Swal.fire("Opps","Error: "+response, "warning");
+        }
+        else{
+          $('#txt_nuevo_pass').val("");
+          $('#btn_cerrar_modal').click();
+          Swal.fire("Éxito","La contraseña ha sido actualizada", "success");
+        }
+        
       }
     });
   }  

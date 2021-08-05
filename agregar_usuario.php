@@ -21,7 +21,7 @@ else{
 }
 
 if($res==""){
-    $sql="insert into usuarios (user, pass, nombre) values('".$txt_user."', 'gruas1234', '".$txt_nombre."')";
+    $sql="insert into usuarios (user, pass, nombre) values('".$txt_user."', 'gruas2021', '".$txt_nombre."')";
     if ($mysqli->query($sql)) {
         $res='Exito';
     }

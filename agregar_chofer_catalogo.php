@@ -1,9 +1,21 @@
 <?php 
 $txt_nombre=$_POST['txt_nombre'];
 $txt_phone=$_POST['txt_phone'];
-$check_plataforma=$_POST['check_plataforma'];
-$check_industrial=$_POST['check_industrial'];
-$check_grande=$_POST['check_grande'];
+$check_plataforma="";
+$check_industrial="";
+$check_grande="";
+
+if(isset($_POST['check_plataforma'])){
+    $check_plataforma=$_POST['check_plataforma'];
+}
+if(isset($_POST['check_industrial'])){
+    $check_industrial=$_POST['check_plataforma'];
+}
+if(isset($_POST['check_grande'])){
+    $check_grande=$_POST['check_grande'];
+}
+
+
 include("conexion.php");
 if (mysqli_connect_errno()) {
     printf("Error de conexion: %s\n", mysqli_connect_error());
@@ -17,7 +29,7 @@ if ($mysqli->query($sql)) {
     $res='Exito';
 }
 else{
-    $res= mysqli_error($mysqli);
+    $res= "Error: ".mysqli_error($mysqli);
 }
 
 echo $res;

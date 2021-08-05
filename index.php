@@ -1,6 +1,7 @@
 <?php
 
    $bandera=0;
+  $credenciales="";
 
     if(isset($_COOKIE['user']) && ($_COOKIE['user'])=="Cambio de pass"){
       $bandera=1;
@@ -20,6 +21,8 @@
       
       $bandera=4;
     }
+
+
     
           
 ?>
@@ -50,8 +53,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#474747', end
   height: 100vh;
 }
 #login .container #login-row #login-column #login-box {
-  /*margin-top: 120px;*/
-  /*max-width: 600px;*/
   width: 100%;
   margin: auto;
   height: 320px;
@@ -68,9 +69,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#474747', end
 </style>
 </head>
 
-
-     
- 
   
   <body styel='background-color:black'>
  
@@ -108,16 +106,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#474747', end
 </body>
 <?php 
 if($bandera==3){
-     /* echo "<script>swal({
-        type: 'warning',
-        text:  'Los datos ingresados son incorrectos',
-      });</script>";
-      */
-
-      echo '<script>window.setTimeout(function() {
-        $(".mensaje").fadeTo(500, 0) 
-    }, 4000);</script>';
-      
+  //$error="<div class='alert alert-danger mensaje' role='alert'>La sesión caducó<br>Debe iniciar sesión nuevamente</div>";
+    //  echo $error;
     }
     ?>
     <?php 

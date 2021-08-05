@@ -3,7 +3,9 @@
 $user=$_POST['user'];
 $pass=$_POST['pass'];
 $res="No existe";
-$mysqli = new mysqli("209.59.139.52:3306", "admini27_gruas", "M@trix2020.", "admini27_gruas");
+$perfil="";
+//$mysqli = new mysqli("209.59.139.52:3306", "admini27_gruas", "M@trix2020.", "admini27_gruas");
+$mysqli = new mysqli("localhost", "admini27_gruas", "M@trix2020.", "admini27_gruas");
 
 /* check connection */
 if (mysqli_connect_errno()) {
@@ -11,20 +13,22 @@ if (mysqli_connect_errno()) {
     exit();
 }
     $result = $mysqli->query("SET NAMES 'utf8'");
-    $sql="SELECT Nombre FROM usuarios where User='".$user."' and Pass='".$pass."' and Estatus='activo'";
+    $sql="SELECT Nombre, perfil FROM usuarios where User='".$user."' and Pass='".$pass."' and Estatus='A'";
 if ($result = $mysqli->query($sql)) {
     while ($row = $result->fetch_row()) {
         if($pass=="gruas2021"){
             setcookie("opcion", "primera");
-            $res=$row[0];
+            $perfil=$row[1];
         }
         else{
             $res=$row[0];
+            $perfil=$row[1];
         }
     }
     $result->close();
 }
     setcookie("user", $res);
+    setcookie("perfil", $perfil);
     setcookie("start", time());
 $mysqli->close();
 
